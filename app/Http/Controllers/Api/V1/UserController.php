@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\UserResource;
 use App\Models\User;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -16,8 +18,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('role')->get();
-        return UserResource::collection($users);
+        try
+        {
+            $users = User::with('role')->get();
+            return UserResource::collection($users);
+        }
+        catch(\Exception $ex)
+        {
+            return Response()->json($ex->getMessage());
+        }
+      
     }
 
     /**
