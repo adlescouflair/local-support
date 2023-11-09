@@ -20,12 +20,12 @@ class UserController extends Controller
     {
         try
         {
-            $users = User::with('role')->get();
+            $users = User::with('role')->paginate();
             return UserResource::collection($users);
         }
         catch(\Exception $ex)
         {
-            return Response()->json($ex->getMessage());
+            return Response()->json(["error" => $ex->getMessage()], 500);
         }
       
     }
